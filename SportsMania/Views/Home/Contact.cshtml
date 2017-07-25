@@ -1,0 +1,138 @@
+﻿@model SportsMania.Models.Message
+
+<script src="~/js/jquery-1.10.2.min.js"></script>
+@{
+    ViewBag.Title = "Contact";
+}
+<html>
+<head>
+    <title>Sports Mania</title>
+   
+    <link href="/assets1/css/style.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="row" style="margin-left:auto; margin-right:auto;margin-top:10px;">
+        <div class="col-md-12" style="text-align:center">
+            <div class=" panel panel-info">
+                <div class="panel-heading"><h3>Contact Us</h3></div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-left:auto; margin-right:auto;">
+        <div class="col-md-12">
+            <div class="col-md-6 panel panel-info">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <h2 style="text-align:center">Sports Mania</h2><hr />
+                        <div class="col-md-6 ">
+                            <b>Lahore Branch</b>
+                            <br>
+                            <small class="icon-shopping-cart"> 248 F2 Multan Road <br />Lahore, 54500</small>
+                            <br>
+                            <small class="icon-mobile-phone"> 03324231939</small>
+                        </div>
+                        <div class="col-md-6 ">
+                            <b>Rawalpindi Branch</b>
+                            <br>
+                            <small class="icon-shopping-cart"> Pir Wadhai Road <br />Rawalpindi, 44370</small>
+                            <br>
+                            <small class="icon-mobile-phone"> 03324231939</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-md-6 ">
+                            <b>Faisalabad Branch</b>
+                            <br>
+                            <small class="icon-shopping-cart"> Main Sargodha Road <br />Faisalabad, 27507</small>
+                            <br>
+                            <small class="icon-mobile-phone"> 03324231939</small>
+                        </div>
+                        <div class="col-md-6 ">
+                            <b>Karachi Branch</b>
+                            <br>
+                            <small class="icon-shopping-cart"> Do Talwar Chowk <br />Karachi, 35982</small>
+                            <br>
+                            <small class="icon-mobile-phone"> 03324231939</small>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div style="text-align:center" class="col-md-12">
+                    <strong>Support:</strong>   <a href="mailto:SaqibAbdullahAzhar@gmail.com">SaqibAbdullahAzhar@gmail.com</a><br /><br />
+                </div>
+            </div>
+
+            <div class="col-md-6 panel panel-danger">
+
+                @using (Html.BeginForm("Create", "Messages"))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h2 style="text-align:center">Message</h2>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    <input type="text" value="You are already loged in.." disabled class="form-control">
+                                </div>
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        }
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Contact, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Label("Message", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Message1, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Message1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-default" />
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

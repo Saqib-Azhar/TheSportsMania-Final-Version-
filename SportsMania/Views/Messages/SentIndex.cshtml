@@ -1,0 +1,96 @@
+﻿@model IEnumerable<SportsMania.Models.Message>
+
+@{
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminPanel.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserPanelLayout.cshtml";
+
+    }
+
+    ViewBag.Title = "Mailbox";
+    ViewBag.SubTitle = "Inbox";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <h3>SportsMania Mailbox </h3>
+
+        @if (this.User.IsInRole("Admin"))
+        {
+            <a href="@Url.Action("Create","Messages")" class="btn btn-primary btn-block margin-bottom">Compose</a>
+        }
+        else
+        {
+            <a href="@Url.Action("Contact","Home")" class="btn btn-primary btn-block margin-bottom">Contact</a>
+        }
+    <div class="box box-solid">
+            <div class="box-header with-border">
+                <h3 class="box-title">Folders</h3>
+            </div>
+            <div class="box-body no-padding">
+                <ul class="nav nav-pills nav-stacked">
+                    <li>
+                        <a href="@Url.Action("Index","Messages")">
+                            <i class="fa fa-inbox"></i> Inbox
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="@Url.Action("SentIndex","Messages")">
+                            <i class="fa fa-envelope-o"></i> Sent
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div><br /><br /><br />
+    <div class="col-md-9">
+        <div class="box box-info">
+            <div class="box-header"><h4><b>Sent Mails</b></h4></div>
+            <div class="box-body">
+                <table class="table table-hover table-striped">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Message1)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.CreationTime)
+                        </th>
+                        <th>
+                            Reciever
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("Details", "Messages", new { id=item.Id })"> @Html.DisplayFor(modelItem => item.Message1)</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreationTime)
+                            </td>
+                            @if (item.RecieverID == null)
+                            {
+                                <td>
+                                    SPORTSMANIA ADMIN
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AspNetUser.Email)
+                                </td>
+
+                            }
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

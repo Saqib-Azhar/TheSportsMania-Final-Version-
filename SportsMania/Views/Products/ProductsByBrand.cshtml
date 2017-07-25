@@ -1,0 +1,141 @@
+﻿@model IEnumerable<SportsMania.Models.Product>
+
+@{
+    ViewBag.Title = "ProductsByBrand";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminPanel.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+    }
+}
+<html>
+<head>
+    <title>Sports Mania</title>
+
+    <link href="/assets1/css/style.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div class="row" style="margin-left:auto; margin-right:auto;margin-top:10px;">
+        <div class="col-md-12" style="text-align:center">
+            <div class=" panel panel-info">
+                <div class="panel-heading"><h3>Products By Brand</h3></div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-left:auto; margin-right:auto;">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <table class="table">
+                    <tr>
+                        <th></th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Brand.BrandName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Category.CategoryName)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+            {
+
+                var base64 = Convert.ToBase64String(item.Image);
+                var imgsrc = string.Format("data:image/+productImage.jpg;base64,{0}", base64);
+
+                        <tr>
+                            <td>
+                                <a href="/Products/Details?id=@item.Id"><img src='@imgsrc' style="max-height:20%;max-width:43.33%;" class="img-responsive" /></a>
+                            </td>
+                            <td>
+                                <a href="/Products/Details?id=@item.Id">@Html.DisplayFor(modelItem => item.ProductName)</a>
+                            </td>
+                            <td>
+                                <a href="/Products/Details?id=@item.Id">@Html.DisplayFor(modelItem => item.Price)</a>
+                            </td>
+                            <td>
+                                <a href="/Products/Details?id=@item.Id"> @Html.DisplayFor(modelItem => item.Brand.BrandName)</a>
+                            </td>
+                            <td>
+                                <a href="/Products/Details?id=@item.Id">@Html.DisplayFor(modelItem => item.Category.CategoryName)</a>
+                            </td>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <td>
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <input type="button" class="btn btn-info" id="AddtoCart" value="Add to Cart" onclick="AddtoCart(@item.Id)" />
+                                    @*@Html.ActionLink("Details", "Details", new { id = item.Id }, htmlAttributes: new { @class = "btn btn-success" })*@
+                                    <button class="btn btn-success" onclick="SaveItem(@item.Id)">Save</button>
+                                </td>
+                            }
+                        </tr>
+                    }
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+    function AddtoCart(prodID) {
+        var count = 1;
+        var id = prodID;
+        $.get('@Url.Action("AddToCart","Carts")',
+            { Id: id, ProductCount: count }, function (data) {
+                alert(data);
+           try {
+            $.get('@Url.Action("CartPrice", "Carts")',
+                    { val: 0 }, function (data) {
+                        if (data == null) {
+                            data = 0;
+                            console.log(data);
+                        }
+                        $("#cartPrice").html("Rs." + data);
+                    });
+                 $.get('@Url.Action("ItemsCountInCart", "Carts")',
+                    { val: 0 }, function (data) {
+                        if (data == null) {
+                            data = 0;
+                            console.log(data);
+                        }
+                        $("#CartCount").html(" "+ data);
+                    });
+            }
+            catch (Exception)
+            {
+                $("#cartPrice").html("Rs. 0");
+            }
+            });
+    }
+  
+
+    function SaveItem(prodID)
+    {
+    var id = prodID;
+        $.get('@Url.Action("SaveNewItem","SavedItems")',
+        { Id: id }, function (data) {
+            alert(data);
+
+        });
+    }
+
+    </script>
+    </body>
+</html>

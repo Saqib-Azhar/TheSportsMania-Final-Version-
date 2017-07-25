@@ -1,0 +1,107 @@
+﻿
+<link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />
+@Styles.Render("~/Content/css")
+@Scripts.Render("~/bundles/modernizr")
+<script src="~/js/jquery-1.10.2.min.js"></script>
+<script src="~/js/jquery-func.js" type="text/javascript"></script>
+<script src="~/js/jquery.jcarousel.pack.js" type="text/javascript"></script>
+<script src="~/js/jquery-1.4.1.min.js" type="text/javascript"></script>
+<script src="~/js/jquery.slide.js" type="text/javascript"></script>
+
+<script>
+        //$(document).ready(function () {
+
+        try {
+            $.get('@Url.Action("CartPrice", "Carts")',
+                    { val: 0 }, function (data) {
+                        if (data == null) {
+                            data = 0;
+                        }
+                        $("#cartPrice").html("Rs." + data);
+                        $.get('@Url.Action("ItemsCountInCart", "Carts")',
+                    { val: 0 }, function (data1) {
+                        if (data1 == null) {
+                            data1 = 0;
+                            console.log(data1);
+                        }
+                        $("#CartCount").html(" "+data1);
+                    });
+                    });
+
+            }
+            catch (Exception)
+            {
+            $("#cartPrice").html("Rs. 0");
+            $("#CartCount").html(" 0");
+            }
+        //});
+</script>
+<!-- Bootstrap styles -->
+<link href="/assets2/style.css" rel="stylesheet" />
+<!-- font awesome styles -->
+<link href="/assets2/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+<!-- Bootstrap core CSS -->
+<link href="/assets1/css/bootstrap.css" rel="stylesheet">
+<!-- Fontawesome core CSS -->
+<link href="/assets1/css/font-awesome.min.css" rel="stylesheet" />
+<!--GOOGLE FONT -->
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<!--Slide Show Css -->
+<link href="/assets1/ItemSlider/css/main-style.css" rel="stylesheet" />
+<!-- custom CSS here -->
+<link href="/assets1/css/style.css" rel="stylesheet" />
+
+
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand icon-xing-sign" href="/Home/index"><b><strong style="font-family:'Brush Script MT'"> Sports</strong><small style="font-family:Magneto"><i>Mania</i></small></b></a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Brands", "Index", "Brands")</li>
+                    <li>@Html.ActionLink("Categories", "Index", "Categories")</li>
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="navbar-form">
+                        @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { htmlAttributes = new { @class = "search-query span2" } }))
+                        {
+                            <span>@Html.Editor("SearchBar", new { htmlAttributes = new { @placeholder = "Search", @class = "form-control" } })</span>
+                            <button class="btn btn-primary">Search</button>
+                        }
+                    </li>
+                    @if (User.IsInRole("Admin"))
+                    { }
+                    else
+                    {
+                        <li>
+
+                            <a href="/Carts/Index"> <span class="icon-shopping-cart" id="CartCount"> 0</span><span> Item(s) -&nbsp;</span><span class="badge badge-warning" id="cartPrice">Rs. 0</span></a>
+
+                        </li>
+                    }
+                    <li>
+                        @Html.Partial("_LoginPartial")
+                    </li>
+                </ul>
+
+
+
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <br />

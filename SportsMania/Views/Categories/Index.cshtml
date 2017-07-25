@@ -1,0 +1,97 @@
+﻿@model IEnumerable<SportsMania.Models.Category>
+
+@{
+    ViewBag.Title = "Index";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminPanel.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+
+    }
+}
+<html>
+<head>
+    <title>Sports Mania</title>
+
+    <link href="/assets1/css/style.css" rel="stylesheet" />
+
+</head>
+<body>
+    
+    <div class="row" style="margin-left:auto; margin-right:auto;margin-top:10px;">
+        <div class="col-md-12" style="text-align:center">
+            <div class=" panel panel-info">
+                <div class="panel-heading">
+                    <h3>Categories</h3>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <h5>@Html.ActionLink("Create New", "Create")</h5>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="margin-left:auto; margin-right:auto;">
+        @foreach (var item in Model)
+        {
+            try
+            {
+                var base64 = Convert.ToBase64String(item.Image);
+                var imgsrc = string.Format("data:image/+productImage.jpg;base64,{0}", base64);
+
+
+                <div class="col-md-4 col-sm-6 col-xs-12  mr-btn-15 ">
+                    <div class="panel panel-success">
+                            <div class="panel-heading" style="text-align:center">
+                                <a href="/Products/ProductsByCategories?Id=@item.Id"><b>@Html.DisplayFor(modelItem => item.CategoryName)</b></a>
+                            </div>
+                            <div class="panel-body">
+                                <figure style="text-align:center;align-content:center;width:auto;height:auto">
+                                    <a href="/Products/ProductsByCategories?Id=@item.Id">
+                                        <img src='@imgsrc' style="max-height:100%;max-width:75%;margin-left:35px" class="img-responsive" />
+
+                                    </a>
+
+                                </figure>
+                            </div>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <div class="panel-footer" style="text-align:center">
+                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                </div>
+                            }
+                    </div>
+                </div>
+
+            }
+            catch (Exception)
+            {
+                <div class="col-md-4 col-sm-4 col-xs-12  mr-btn-15 ">
+                    <div class="panel panel-info">
+                        <div style="align-items:center">
+                            <figure style="text-align:center;align-content:center;width:auto;height:150px">
+                                <a href="/Products/ProductsByCategories?Id=@item.Id">
+                                    <b>@Html.DisplayFor(modelItem => item.CategoryName)</b>
+                                </a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <p>
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                        @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                    </p>
+                                }
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    </body></html>

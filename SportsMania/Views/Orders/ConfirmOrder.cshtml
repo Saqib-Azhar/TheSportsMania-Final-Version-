@@ -1,0 +1,79 @@
+﻿@model SportsMania.Models.Order
+
+@{
+    ViewBag.Title = "ConfirmOrder";
+    if (User.IsInRole("Admin"))
+    {
+        Layout = "~/Views/Shared/_AdminPanel.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserPanelLayout.cshtml";
+
+    }
+}
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/jquery-1.10.2.js"></script>
+<script src="~/js/jquery-1.10.2.min.js"></script>
+<script>
+
+    $(document).ready(function () {
+
+        $("#ConfirmOrders").click(function () {
+            var email = $('#EmailVal').val();
+            var phone = $('#PhoneVal').val();
+            var address = $('#AddressVal').val();
+            console.log(address);
+            $.get('@Url.Action("ConfirmedOrder", "Orders")',
+                { email: email, phone: phone, address: address }, function (data) {
+                    alert(data);
+                });
+        });
+    });
+</script>
+
+<h2>ConfirmOrder</h2>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" value="" id="AddressVal" class="form-control" />
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" value="" id="PhoneVal" class="form-control" />
+                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailID, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="text" value="" id="EmailVal" class="form-control"/>
+                @Html.ValidationMessageFor(model => model.EmailID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" value="Confirm Order" id="ConfirmOrders" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

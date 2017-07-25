@@ -1,0 +1,81 @@
+﻿@model IEnumerable<SportsMania.Models.Product>
+
+<script src="~/js/jquery-1.10.2.min.js"></script>
+@{
+    ViewBag.Title = "Search Results";
+}
+<html>
+<head>
+    <title>Sports Mania</title>
+
+    <link href="/assets1/css/style.css" rel="stylesheet" />
+
+</head>
+<body>
+    @ViewBag.Title
+    @ViewBag.Message
+
+    <div class="row" style="margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;">
+        <div class="col-md-12">
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    @foreach (var item in Model)
+            {
+                try
+                {
+                    var base64 = Convert.ToBase64String(item.Image);
+                    var imgsrc = string.Format("data:image/+productImage.jpg;base64,{0}", base64);
+
+
+                            <div class="col-md-4 col-sm-4 col-xs-12  mr-btn-15 " style="margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;">
+                                <div class="panel panel-primary" style="height:300px;width:280px">
+                                    <div style="align-items:center">
+                                        <figure style="text-align:center;align-content:center;width:auto;height:auto;margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;">
+                                            <a href="/Products/details?Id=@item.Id">
+                                                <img src='@imgsrc' style="max-height:100%;max-width:75%;margin-left:35px" class="img-responsive" />
+                                                <b>@Html.DisplayFor(modelItem => item.ProductName)</b><br />
+                                                @Html.DisplayFor(modelItem => item.Price)
+                                            </a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <p>
+                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                                </p>
+                                            }
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+                        catch (Exception)
+                        {
+                            <div class="col-md-4 col-sm-4 col-xs-12  mr-btn-15 ">
+                                <div class="panel panel-primary">
+                                    <div style="align-items:center">
+                                        <figure style="text-align:center;align-content:center;width:auto;height:150px;margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;">
+                                            <a href="/Products/details?Id=@item.Id">
+                                                <b>@Html.DisplayFor(modelItem => item.ProductName)</b><br />
+                                                @Html.DisplayFor(modelItem => item.Price)
+                                            </a>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <p>
+                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                                </p>
+                                            }
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    </body></html>

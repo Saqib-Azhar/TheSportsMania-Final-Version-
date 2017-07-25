@@ -1,0 +1,183 @@
+﻿@model IEnumerable<SportsMania.Models.Product>
+
+<script src="~/js/jquery-1.10.2.min.js"></script>
+@{
+    ViewBag.Title = "Home Page";
+}
+<html>
+<head>
+    <title>Sports Mania</title>
+    <link rel="stylesheet" href="/css/style.css" type="text/css" media="all" />    
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <script src="~/js/jquery-1.10.2.min.js"></script>
+    <script src="~/js/jquery-func.js" type="text/javascript"></script>
+    <script src="~/js/jquery.jcarousel.pack.js" type="text/javascript"></script>
+    <script src="~/js/jquery-1.4.1.min.js" type="text/javascript"></script>
+    <script src="~/js/jquery.slide.js" type="text/javascript"></script>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets1/css/bootstrap.css" rel="stylesheet">
+    <!-- Fontawesome core CSS -->
+    <link href="/assets1/css/font-awesome.min.css" rel="stylesheet" />
+    <!--GOOGLE FONT -->
+    <!--Slide Show Css -->
+    <link href="/assets1/ItemSlider/css/main-style.css" rel="stylesheet" />
+    <!-- custom CSS here -->
+    <link href="/assets1/css/style.css" rel="stylesheet" />
+
+
+    <script>
+        $(document).ready(function () {
+
+
+            function parseJsonDate(jsonDateString) {
+                var currentdate = new Date(parseInt(jsonDateString.replace('/Date(', '')));
+
+                return currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+            }
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            $.get('@Url.Action("GetNotifications","Notifications")', function (data) {
+                var count = 1;
+                $.each(data, function (i, item) {
+                    item.ValidDate = parseJsonDate(item.ValidDate);
+                    if (count % 3 == 0) {
+                        $('#Notifications_area').append('<div class="well well-lg offer-box text-center" style="background-color:greenyellow"><span>' + item.Message + '<br /><p class"small">(This offer is valid Till: ' + item.ValidDate + ')</p></span></div>');
+
+                    }
+                    else if (count % 2 == 0)
+                    {
+                        $('#Notifications_area').append('<div class="well well-lg offer-box text-center"  style="background-color:blueviolet"><span>' + item.Message + '<br /><p class"small">(This offer is valid Till: ' + item.ValidDate + ')</p></span></div>');
+                    }
+                    else
+                    {
+                        $('#Notifications_area').append('<div class="well well-lg offer-box text-center"><span>' + item.Message + '<br /><p class"small">(This offer is valid Till: ' + item.ValidDate + ')</p></span></div>');
+                    }
+                    count++;
+                });
+            });
+
+        });
+</script>
+
+</head>
+<body>
+    <br />
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="panel panel-info">
+                <div class="row" style="margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;">
+
+                    <div class="col-md-12">
+
+                        <div id="mi-slider" class="mi-slider">
+                            <ul>
+                                @foreach (var item in Model)
+                                {
+                                    var base64 = Convert.ToBase64String(item.Image);
+                                    var imgsrc = string.Format("data:image/+productImage.jpg;base64,{0}", base64);
+                                
+                                <li>
+                                    <a href="/Products/details?Id=@item.Id">
+                                        <img src="@imgsrc" alt="img01"><h4>@Html.DisplayFor(modelItem => item.ProductName)</h4>
+                                    </a>
+                                </li>
+                                }
+                                
+                            </ul>
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("ProductsByBrand", "Products", new { id = 7 })">
+                                        <img src="~/assets/brands Images/logo new (3).png" /><h4>Reebok</h4>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ProductsByBrand", "Products", new { id = 4 })">
+                                        <img src="~/assets/brands Images/logo new (4).png" /><h4>Addidas</h4>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ProductsByBrand", "Products", new { id = 8 })">
+                                        <img src="~/assets/brands Images/logo new (5).png" /><h4>Nike</h4>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ProductsByBrand", "Products", new { id = 9 })">
+                                        <img src="~/assets/brands Images/logo new (6).png" /><h4>Converse</h4>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("ProductsByCategories", "Products", new { id = 2 })">
+                                        <img src="~/assets/sportsgoods.jpg" /><h4>Sports Goods</h4>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ProductsByCategories", "Products", new { id = 1 })">
+                                        <img src="~/assets/wearables.jpg" alt="img14"><h4>Wearables</h4>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="@Url.Action("ProductsByCategories", "Products", new { id = 3 })">
+                                        <img src="~/assets/Accessories.jpg" alt="img12"><h4>Accessories</h4>
+                                    </a>
+                                </li>
+                            </ul>
+                            <nav>
+                                <a href="#">Top Products</a>
+                                <a href="#">Brands</a>
+                                <a href="#">Categories</a>
+                            </nav>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div id="Notifications_area" class="col-md-10"></div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="col-md-1"></div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+
+    <script src="/assets1/js/jquery-1.10.2.js"></script>
+    <!--bootstrap JavaScript file  -->
+    <script src="/assets1/js/bootstrap.js"></script>
+    <!--Slider JavaScript file  -->
+    <script src="/assets1/ItemSlider/js/modernizr.custom.63321.js"></script>
+    <script src="/assets1/ItemSlider/js/jquery.catslider.js"></script>
+    <script>
+        $(function () {
+
+            $('#mi-slider').catslider();
+
+        });
+    </script>
+    <!-- /.col -->
+    <!--Footer end -->
+    <!--Core JavaScript file  -->
+    <script src="/assets1/js/jquery-1.10.2.js"></script>
+    <!--bootstrap JavaScript file  -->
+    <script src="/assets1/js/bootstrap.js"></script>
+    <!--Slider JavaScript file  -->
+    <script src="/assets1/ItemSlider/js/modernizr.custom.63321.js"></script>
+    <script src="/assets1/ItemSlider/js/jquery.catslider.js"></script>
+    <script>
+        $(function () {
+
+            $('#mi-slider').catslider();
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,264 @@
+﻿@model SportsMania.Models.Product
+@using Microsoft.AspNet.Identity
+<script src="~/js/angular.min.js"></script>
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html>
+<head>
+    <title>Sports Mania</title>
+
+    <link href="/assets1/css/style.css" rel="stylesheet" />
+
+</head>
+<body>
+    <div ng-app="" ng-init="productCount=1">
+        @{
+            var base64 = Convert.ToBase64String(Model.Image);
+            var imgsrc = string.Format("data:image/+productImage.jpg;base64,{0}", base64);
+        }
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading" style="text-align:center"><b>@Model.ProductName</b></div>
+                    <div class="panel-body">
+                        <div class="row" style="align-content:center">
+                            <div class="col-md-4">
+                                <div class="panel-body">
+                                    <div class="col-md-6 col-sm-4 col-xs-12  mr-btn-15 ">
+                                        <div class="panel panel-primary" style="height:300px;width:280px">
+                                            <div>
+                                                <figure style="text-align:center;align-content:center;width:auto;height:auto;margin-left:auto; margin-right:auto; margin-top:auto; margin-bottom:auto;">
+                                                    <a href="/Products/details?Id=@Model.Id">
+                                                        <img src='@imgsrc' style="max-height:100%;max-width:75%;margin-left:35px" class="img-responsive" />
+                                                        <b>@Html.DisplayNameFor(model => model.ProductName)</b><br />
+                                                        @Html.DisplayFor(model => model.Price)
+                                                    </a>
+                                                </figure>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1"></div>
+                            <div class="col-md-7" style="align-items:center;align-content:center;align-self:center;text-align:center;margin-top:15px">
+                                <div class="panel panel-default" style="height:300px;width:400px">
+                                    <div class="col-md-12 row">
+                                        <b>
+                                            <table class="table table-bordered" style="height:300px;width:400px">
+                                                <tbody>
+                                                    <tr class="techSpecRow"><th colspan="2" style="text-align:center">Product Details</th></tr>
+                                                    <tr class="techSpecRow"><td class="techSpecTD1">Name: </td><td class="techSpecTD2">@Html.DisplayFor(model => model.ProductName)</td></tr>
+                                                    <tr class="techSpecRow"><td class="techSpecTD1">Price:</td><td class="techSpecTD2">@Html.DisplayFor(model => model.Price)</td></tr>
+                                                    <tr class="techSpecRow"><td class="techSpecTD1">Brand:</td><td class="techSpecTD2"> @Html.DisplayFor(model => model.Brand.BrandName)</td></tr>
+                                                    <tr class="techSpecRow"><td class="techSpecTD1">Category:</td><td class="techSpecTD2"> @Html.DisplayFor(model => model.Category.CategoryName)</td></tr>
+                                                    <tr class="techSpecRow"><td class="techSpecTD1">Rating:</td><td class="techSpecTD2"> @Html.DisplayFor(model => model.AvgRating)</td></tr>
+                                                    <tr class="techSpecRow"><td class="techSpecTD1">Total Votes:</td><td class="techSpecTD2"> @Html.DisplayFor(model => model.TotalVotes)</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @if (User.IsInRole("Admin"))
+            {
+            <div style="align-self:center" class="panel panel-warning panel-body">
+                <h4 style="text-align:center">
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+                    @Html.ActionLink("Back to List", "Index")
+                </h4>
+            </div>
+        }
+
+        else
+        {
+            if (Request.IsAuthenticated)
+            {
+                <div style="align-self:center" class="panel panel-default panel-body">
+
+                    <h4 style="text-align:center">
+                        <b>
+                            Number of Products
+                        </b>
+                        <input type="number" min="1" value="1" id="ProductCount" class="well well-sm" style="text-align:center"/>
+                        <input type="button" class="btn btn-default" id="AddtoCart" value="Add to Cart" />
+
+                    </h4>
+                </div>
+            }
+            else
+            {
+                <div style="align-self:center" class="panel panel-warning panel-body">
+                    <h4 style="text-align:center">
+
+                        @Html.ActionLink("Log in to Order", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+
+                    </h4>
+                </div>
+            }
+        }
+
+
+        <div> <input type="button" id="ShowReviews" value="Show Reviews" class="btn btn-default"></div>
+        <div id="AddReview" >
+            <div class="panel panel-info">
+                <div class="panel-heading" style="text-align:center">
+                    <b>Add/Edit Review</b>
+                </div>
+                <div style="align-self:center" class="panel-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.Editor("ReviewUserName", new { htmlAttributes = new { @class = "form-control", @id = "ReviewUserName" } })
+                                        @Html.ValidationMessage("ReviewUserName", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Review Title", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.Editor("ReviewTitle", new { htmlAttributes = new { @class = "form-control", @id = "ReviewTitle" } })
+                                        @Html.ValidationMessage("ReviewTitle", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    @Html.Label("Review", htmlAttributes: new { @class = "control-label col-md-2" })
+                                    <div class="col-md-10">
+                                        @Html.Editor("Review", new { htmlAttributes = new { @class = "form-control", @id = "Review" } })
+                                        @Html.ValidationMessage("Review", "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Rate", htmlAttributes: new { @class = "control-label col-md-2" })
+                                        <div class="col-md-10">
+                                            <input type="range" min="1" max="5" class="form-control" id="Rate"/>
+                                            @Html.ValidationMessage("Rate", "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="col-md-offset-5 col-md-12">
+                                            <input type="submit" value="Add/Edit" class="btn btn-default" id="ReviewSubmit" />
+                                            <input type="submit" value="Cancle" class="btn btn-default" id="ReivewCancle" />
+                                        </div>
+                                    </div>
+                                </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-info">
+            <div class="panel-heading" style="text-align:center">
+                <b>Reviews & Comments</b>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-responsive table-striped" id="Reviewstable">
+                    <tr style="text-align:center">
+                        <th>UserName</th>
+                        <th>Review</th>
+                        <th>Rating</th>
+                        <th>Time</th>
+                    </tr>
+                </table>
+            </div>
+        </div> 
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        $("#ReviewSubmit").click(function () {
+            var review = $("#Review").val();
+            var rate = $("#Rate").val();
+            var name = $("#ReviewUserName").val();
+            var reviewheading = $("#ReviewTitle").val();
+            var prodId = @Model.Id;
+            $.get('@Url.Action("AddEditReview", "ProductReviews")',
+                    { prodID: prodId, rating: rate, review: review, userName: name, reviewHeading: reviewheading }, function (data) {
+                        alert(data);
+                        window.location.reload();
+                    });
+        });
+
+        $("#ShowReviews").click(function () {
+            var prodId = @Model.Id;
+            $.get('@Url.Action("ProductReviews", "ProductReviews")',
+                    { ProdID: prodId }, function (data) {
+                        $.each(data, function (i, item) {
+                            item.Time = parseJsonDate(item.Time);
+                            $('#Reviewstable').append('<tr><td>' + item.UserName + '</td><td>' + item.Review + '</td><td>' + item.Rate + '</td><td>' + item.Time + '</td></tr>');
+                            console.log(item);
+                        });
+
+
+                    });
+        });
+
+        function parseJsonDate(jsonDateString) {
+            var currentdate = new Date(parseInt(jsonDateString.replace('/Date(', '')));
+
+            return currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+        }
+    $("#AddtoCart").click(function () {
+        var count = $("#ProductCount").val();
+        var id = @Model.Id;
+        $.get('@Url.Action("AddToCart","Carts")',
+            { Id: id, ProductCount: count }, function (data) {
+                alert(data);
+                try {
+            $.get('@Url.Action("CartPrice", "Carts")',
+                    { val: 0 }, function (data) {
+                        if (data == null) {
+                            data = 0;
+                            console.log(data);
+                        }
+                        $("#cartPrice").html("Rs." + data);
+                    });
+                 $.get('@Url.Action("ItemsCountInCart", "Carts")',
+                    { val: 0 }, function (data) {
+                        if (data == null) {
+                            data = 0;
+                            console.log(data);
+                        }
+                        $("#CartCount").html(data);
+                    });
+            }
+            catch (Exception)
+            {
+                $("#cartPrice").html("Rs. 0");
+            }
+            });
+    });
+
+    </script>
+    </body>
+</html>

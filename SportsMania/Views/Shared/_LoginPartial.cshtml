@@ -1,0 +1,95 @@
+﻿@using Microsoft.AspNet.Identity
+
+
+<script src="~/Scripts/jquery-1.11.1.min.js"></script>
+
+@if (Request.IsAuthenticated)
+{
+    <script>
+    $(document).ready(function () {
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        $.get('@Url.Action("GetNotifications","Notifications")', function (data) {
+            console.log(data);
+                $('#notification_numbers').html(data.length);
+                $('#notifications_header').html(data.length + ' New Notification(s)');
+                $.each(data, function (i, item) {
+                    $('#notification_Dropdown_area').append('<li><a href="/Notifications/Details?id=' + item.Id + '"><p>' + item.Message + '</p><div class="clearfix"></div></a></li><hr>');
+                });
+            });
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        $.get('@Url.Action("GetMessages","Messages")', function (data) {
+            $('#messages_numbers').html(data.length);
+            $('#messages_header').html(data.length + ' New Message(s)');
+            $.each(data, function (i, item) {
+                $('#messages_Dropdown_area').append('<li><a href="/Messages/Details?id=' + item.Id + '"><p><b>' + item.Name + '</b>: ' + item.Message1 + '</p><div class="clearfix"></div></a></li><hr>');
+            });
+        });
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    });
+
+
+    </script>
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown messages-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-envelope-o"></i>
+                <span class="label label-success" id="messages_numbers"></span>
+            </a>
+            <ul class="dropdown-menu panel panel-default">
+                <li class="panel-heading" id="messages_header"> New Messages</li>
+                <li>
+                    <ul class="panel-body" id="messages_Dropdown_area"></ul>
+                </li>
+                <li class="panel-footer"><a href="/Messages/Index">Mailbox</a></li>
+            </ul>
+        </li>
+        @if (this.User.IsInRole("User"))
+        {
+            <li class="dropdown notifications-menu">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    <i class="fa fa-bell-o"></i>
+                    <span class="label label-warning" id="notification_numbers"></span>
+                </a>
+                <ul class="dropdown-menu panel panel-default">
+                    <li class="panel-heading" id="notifications_header"> New Notifications</li>
+                    <li>
+                        <ul class="menu panel-body" id="notification_Dropdown_area"></ul>
+                    </li>
+                    <li class="panel-footer"><a href="/Notifications/Index">View all Notifications</a></li>
+                </ul>
+            </li>
+        }
+        <li>
+            @if (User.IsInRole("Admin"))
+            {
+                @*@Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Panel", "AdminPanel", routeValues: null, htmlAttributes: new { title = "Manage" })*@
+                @Html.ActionLink("Dashboard", "Panel", "AdminPanel", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+            else
+            {
+                @Html.ActionLink("Dashboard", "Panel", "UserPanel", routeValues: null, htmlAttributes: new { title = "Manage" })
+            }
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
