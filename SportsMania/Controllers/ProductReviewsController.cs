@@ -129,7 +129,7 @@ namespace SportsMania.Controllers
 
         
 
-        public JsonResult AddEditReview(int prodID, int rating, string review)
+        public JsonResult AddEditReview(int prodID, int rating, string review, string userName, string ReviewTitle)
         {
             var msg = "An Error Occured Please Try Again";
             var userID = this.User.Identity.GetUserId();
@@ -154,6 +154,8 @@ namespace SportsMania.Controllers
                 ReviewObj.Review = review;
                 ReviewObj.Time = DateTime.Now;
                 ReviewObj.VoterID = userID;
+                ReviewObj.ReviewTitle = ReviewTitle;
+                ReviewObj.UserName = userName;
 
                 db.ProductReviews.Add(ReviewObj);
                 db.SaveChanges();
@@ -174,6 +176,8 @@ namespace SportsMania.Controllers
                 checkVoter.Review = review;
                 checkVoter.Time = DateTime.Now;
                 checkVoter.VoterID = userID;
+                checkVoter.ReviewTitle = ReviewTitle;
+                checkVoter.UserName = userName;
 
                 db.SaveChanges();
                 msg = "Review Updated Successfully";
@@ -190,7 +194,7 @@ namespace SportsMania.Controllers
             var ReviewList = (from review in db.ProductReviews
                             where review.ProductID == ProdID
                             orderby review.Time
-                            select new { review.Id, review.Rate, review.Review, review.Time, review.AspNetUser.UserName }).ToList();
+                            select new { review.Id, review.Rate, review.Review, review.Time, review.UserName, review.ReviewTitle }).ToList();
             return Json(ReviewList, JsonRequestBehavior.AllowGet);
         }
 

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SportsMania.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SportsMania.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
@@ -161,6 +161,8 @@
           <Property Name="Rate" Type="int" />
           <Property Name="VoterID" Type="nvarchar" MaxLength="128" />
           <Property Name="Time" Type="datetime" />
+          <Property Name="ReviewTitle" Type="nvarchar(max)" />
+          <Property Name="UserName" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -484,8 +486,7 @@
             <End Role="Messages" EntitySet="Messages" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SportsMania" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -661,6 +662,8 @@
           <Property Name="Time" Type="DateTime" Precision="3" />
           <NavigationProperty Name="AspNetUser" Relationship="Self.FK_Reviews_ToUser" FromRole="ProductReviews" ToRole="AspNetUsers" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Reviews_ToProducts" FromRole="ProductReviews" ToRole="Products" />
+          <Property Name="ReviewTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -1120,6 +1123,8 @@
           <EntitySetMapping Name="ProductReviews">
             <EntityTypeMapping TypeName="SportsMania.ProductReview">
               <MappingFragment StoreEntitySet="ProductReviews">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ReviewTitle" ColumnName="ReviewTitle" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Review" ColumnName="Review" />

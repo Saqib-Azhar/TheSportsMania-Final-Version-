@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'c:\users\saqib abdullah azhar\documents\visual studio 2015\Projects\SportsMania\SportsMania\Models\SportsMania.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Users\Saqib Abdullah Azhar\documents\visual studio 2015\Projects\SportsMania\SportsMania\Models\SportsMania.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

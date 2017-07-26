@@ -20,6 +20,8 @@ namespace SportsMania.Models
         public Nullable<int> Rate { get; set; }
         public string VoterID { get; set; }
         public Nullable<System.DateTime> Time { get; set; }
+        public string ReviewTitle { get; set; }
+        public string UserName { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
         public virtual Product Product { get; set; }
