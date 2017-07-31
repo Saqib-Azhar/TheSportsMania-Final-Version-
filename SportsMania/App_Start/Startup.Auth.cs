@@ -54,9 +54,9 @@ namespace SportsMania
             //   consumerKey: "",
             //   consumerSecret: "");
 
-            //app.UseFacebookAuthentication(
-            //   appId: "",
-            //   appSecret: "");
+            app.UseFacebookAuthentication(
+               appId: "1831759033713298",
+               appSecret: "bef97e54cfe3aac1af7143834945c362");
 
             //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
             //{
